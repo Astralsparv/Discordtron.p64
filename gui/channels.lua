@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2026-02-12 18:33:53",modified="2026-02-12 21:13:34",revision=123,xstickers={}]]
+--[[pod_format="raw",created="2026-02-12 18:33:53",modified="2026-02-13 20:16:13",revision=131,xstickers={}]]
 --
 -- Channel navbar
 -- GUI Object
@@ -26,16 +26,17 @@ channels.update=function(self,cx,cy)
 			if (curs.b&0x1==0x1 and curs.lb==0) then
 				activeChannel=tostr(v.id)
 				self.discord:queryChannelFeed(v.id)
-				self.ud=nil
+				self.regenerateNeeded=true
 			end
 		end
 	end
 end
 
 channels.draw=function(self,x,y)
-	if (false and self.ud) then
+	if (self.regenerateNeeded!=true and self.ud) then
 		spr(self.ud,x,y)
 	else
+		self.regenerateNeeded=nil
 		self.ud=userdata("u8",self.width,self.height)
 		local trg=get_draw_target()
 		set_draw_target(self.ud)

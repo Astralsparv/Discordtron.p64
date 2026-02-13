@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2026-02-09 19:45:40",modified="2026-02-12 21:41:24",revision=180,xstickers={}]]
+--[[pod_format="raw",created="2026-02-09 19:45:40",modified="2026-02-13 19:58:08",revision=185,xstickers={}]]
 local gui={
 	channels=include("gui/channels.lua"),
 	channelFeed=include("gui/channelFeed.lua")
@@ -35,8 +35,8 @@ gui.update_all=function(self)
 end
 
 gui.refresh=function(self,object)
-	if (object=="channels") self.channels.ud=nil
-	if (object=="channelFeed") self.channelFeed.ud=ni
+	if (object=="channels") self.channels.regenerateNeeded=true
+	if (object=="channelFeed") self.channelFeed.regenerateNeeded=true
 end
 
 gui.draw_all=function(self,x,y)

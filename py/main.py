@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2026-02-12 21:47:17",modified="2026-02-12 21:47:33",revision=1,xstickers={}]]
+--[[pod_format="raw",created="2026-02-13 20:17:55",modified="2026-02-13 20:17:55",revision=0,xstickers={}]]
 import asyncio
 import discord,json
 import discord.ext
@@ -27,7 +27,7 @@ async def send_discord_message(channel_id, content):
     if channel:
         await channel.send(content)
 
-async def fetch_last_messages(channel_id):
+async def fetch_last_messages(channel_id,count):
     channel=client.get_channel(int(channel_id))
 
     if not channel:
@@ -35,7 +35,7 @@ async def fetch_last_messages(channel_id):
         return
 
     messages=[]
-    async for message in channel.history(limit=16):
+    async for message in channel.history(limit=int(count)):
         messages.append({
             "channelid": f"{message.channel.id}",
             "channelname": message.channel.name,
@@ -57,7 +57,7 @@ def process_req(cmd):
         try:
             _,rest=cmd.split(";",1)
 
-            channel_part,message_content=rest.split(";message;", 1)
+            channel_part,message_content=rest.split(";message:", 1)
 
             channel_id=channel_part.split(":")[1]
             
@@ -92,9 +92,11 @@ def process_req(cmd):
     if cmd.startswith("querymessages;"):
         print("Messages queried.")
         try:
-            _,channelid=cmd.split(";",1)
+            _,rest=cmd.split(";",1)
+
+            channelid,count=rest.split(";count:", 1)
             asyncio.run_coroutine_threadsafe(
-                fetch_last_messages(channelid),
+                fetch_last_messages(channelid,count),
                 client.loop
             )
         except Exception as e:
